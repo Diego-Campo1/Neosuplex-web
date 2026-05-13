@@ -62,11 +62,25 @@
                 <h2>2. Identificación</h2>
                 <div class="checkout-form text-center">
                     <p>¿Cómo deseas continuar con tu compra?</p>
-                    <div class="role-selector">
-                        <label class="role-card"><input type="radio" name="rol" checked><i class="fas fa-user"></i><h4>Cliente</h4><p>Tengo cuenta</p></label>
-                        <label class="role-card"><input type="radio" name="rol"><i class="fas fa-user-clock"></i><h4>Invitado</h4><p>Compra rápida</p></label>
-                        <label class="role-card"><input type="radio" name="rol"><i class="fas fa-truck-loading"></i><h4>Proveedor</h4><p>Cuenta mayorista</p></label>
+                    
+                    <div class="role-selector" style="display: flex; justify-content: center; gap: 20px;">
+                        <label class="role-card">
+                            <input type="radio" name="rol" value="cliente" checked>
+                            <i class="fas fa-user"></i>
+                            <h4>Cliente</h4>
+                            <p>Tengo cuenta</p>
+                            <span style="display: block; margin-top: 8px; font-size: 0.85em; color: #10b981; font-weight: bold;">
+                                <i class="fas fa-star"></i> ¡Sumás puntos!
+                            </span>
+                        </label>
+                        <label class="role-card">
+                            <input type="radio" name="rol" value="invitado">
+                            <i class="fas fa-user-clock"></i>
+                            <h4>Invitado</h4>
+                            <p>Compra rápida</p>
+                        </label>
                     </div>
+
                     <button class="btn-blue mt-3" onclick="irPaso3()">Confirmar y Continuar <i class="fas fa-arrow-right"></i></button>
                 </div>
             </div>
