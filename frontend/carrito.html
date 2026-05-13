@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrito de Compras - Neosuplex</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header class="header">
+        <div class="container nav-container">
+            <a href="index.html" class="logo">
+                <img src="imagenes/Logo1.0.png" alt="Neosuplex Logo">
+            </a>
+            <nav class="nav">
+                <ul class="nav-links">
+                    <li><a href="index.html">Inicio</a></li>
+                    <li><a href="productos.html">Productos</a></li>
+                </ul>
+            </nav>
+            <div class="header-actions">
+                <a href="carrito.html" class="cart-icon" style="color: var(--color-primary);">
+                    <i class="fas fa-shopping-cart"></i><span class="cart-count">0</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <section class="checkout-section">
+        <div class="container checkout-container">
+
+            <div id="paso-1" class="checkout-step">
+                <h2>1. Resumen y Datos de Envío</h2>
+                
+                <div class="cart-summary">
+                    <div id="lista-carrito"></div>
+                    <div class="cart-total" style="margin-top: 20px; border-top: 1px solid var(--color-border); padding-top: 15px;">
+                        <h3>Total a Pagar:</h3>
+                        <h3 class="text-green" id="total-pagar" style="color: var(--color-primary);">$0.00</h3>
+                    </div>
+                </div>
+
+                <div class="checkout-form">
+                    <h3>Completa tus datos para el envío</h3>
+                    <div class="form-row">
+                        <div class="form-group"><label>Nombre</label><input type="text" placeholder="Ej. Juan"></div>
+                        <div class="form-group"><label>Apellido</label><input type="text" placeholder="Ej. Pérez"></div>
+                    </div>
+                    <div class="form-group"><label>Email</label><input type="email" placeholder="tu@email.com"></div>
+                    <div class="form-row">
+                        <div class="form-group"><label>Dirección Completa</label><input type="text" placeholder="Calle, Número, Piso..."></div>
+                        <div class="form-group"><label>Código Postal</label><input type="text" placeholder="Ej. 5500"></div>
+                    </div>
+                    <button class="btn-blue btn-full mt-3" onclick="irPaso2()">Continuar <i class="fas fa-arrow-right"></i></button>
+                </div>
+            </div>
+
+            <div id="paso-2" class="checkout-step" style="display: none;">
+                <h2>2. Identificación</h2>
+                <div class="checkout-form text-center">
+                    <p>¿Cómo deseas continuar con tu compra?</p>
+                    <div class="role-selector">
+                        <label class="role-card"><input type="radio" name="rol" checked><i class="fas fa-user"></i><h4>Cliente</h4><p>Tengo cuenta</p></label>
+                        <label class="role-card"><input type="radio" name="rol"><i class="fas fa-user-clock"></i><h4>Invitado</h4><p>Compra rápida</p></label>
+                        <label class="role-card"><input type="radio" name="rol"><i class="fas fa-truck-loading"></i><h4>Proveedor</h4><p>Cuenta mayorista</p></label>
+                    </div>
+                    <button class="btn-blue mt-3" onclick="irPaso3()">Confirmar y Continuar <i class="fas fa-arrow-right"></i></button>
+                </div>
+            </div>
+
+            <div id="paso-3" class="checkout-step" style="display: none;">
+                <h2>3. Pago Seguro</h2>
+                <div class="checkout-form">
+                    <div class="payment-icons">
+                        <i class="fab fa-cc-visa"></i> <i class="fab fa-cc-mastercard"></i> <i class="fab fa-cc-amex"></i>
+                    </div>
+                    <div class="form-group"><label>Número de Tarjeta</label><input type="text" placeholder="0000 0000 0000 0000"></div>
+                    <div class="form-row">
+                        <div class="form-group"><label>Fecha de Vencimiento</label><input type="text" placeholder="MM/AA"></div>
+                        <div class="form-group"><label>Código de Seguridad (CVV)</label><input type="text" placeholder="123"></div>
+                    </div>
+                    <div class="form-group"><label>Nombre en la Tarjeta</label><input type="text" placeholder="Como aparece en la tarjeta"></div>
+                    <button id="btn-finalizar" class="btn-yellow btn-full mt-3" onclick="finalizarCompra()">
+                        <i class="fas fa-lock"></i> Finalizar Compra
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <script src="main.js"></script>
+</body>
+</html>
