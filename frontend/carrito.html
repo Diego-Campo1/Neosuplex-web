@@ -7,6 +7,52 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <style>
+        /* Estilos específicos para los selectores de pago y roles */
+        .role-selector, .payment-selector {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .role-card, .payment-card {
+            background: var(--color-bg-card);
+            border: 2px solid var(--color-border);
+            padding: 20px;
+            border-radius: 12px;
+            cursor: pointer;
+            width: 150px;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        .role-card input, .payment-card input {
+            display: none;
+        }
+        .role-card i, .payment-card i {
+            font-size: 24px;
+            color: var(--color-text-dull);
+            margin-bottom: 10px;
+            display: block;
+        }
+        /* Efecto cuando está seleccionado */
+        .role-card:has(input:checked), .payment-card:has(input:checked) {
+            border-color: var(--color-primary);
+            background: rgba(16, 185, 129, 0.05);
+        }
+        .role-card:has(input:checked) i, .payment-card:has(input:checked) i {
+            color: var(--color-primary);
+        }
+        .payment-icons i {
+            font-size: 30px;
+            margin: 0 5px;
+            color: var(--color-text-dull);
+        }
+        #mensaje-mp img {
+            max-width: 120px;
+            filter: brightness(0.9);
+        }
+    </style>
 </head>
 <body>
 
@@ -22,6 +68,11 @@
                 </ul>
             </nav>
             <div class="header-actions">
+                <div id="contenedor-usuario">
+                    <a href="login.html" class="btn-login">
+                        <i class="fas fa-user"></i> Iniciar Sesión
+                    </a>
+                </div>
                 <a href="carrito.html" class="cart-icon" style="color: var(--color-primary);">
                     <i class="fas fa-shopping-cart"></i><span class="cart-count">0</span>
                 </a>
@@ -46,15 +97,18 @@
                 <div class="checkout-form">
                     <h3>Completa tus datos para el envío</h3>
                     <div class="form-row">
-                        <div class="form-group"><label>Nombre</label><input type="text" placeholder="Ej. Juan"></div>
-                        <div class="form-group"><label>Apellido</label><input type="text" placeholder="Ej. Pérez"></div>
+                        <div class="form-group"><label>Calle</label><input type="text" id="envio-calle" placeholder="Ej. Av. San Martín"></div>
+                        <div class="form-group"><label>Altura / Nro</label><input type="text" id="envio-altura" placeholder="Ej. 1420"></div>
                     </div>
-                    <div class="form-group"><label>Email</label><input type="email" placeholder="tu@email.com"></div>
                     <div class="form-row">
-                        <div class="form-group"><label>Dirección Completa</label><input type="text" placeholder="Calle, Número, Piso..."></div>
-                        <div class="form-group"><label>Código Postal</label><input type="text" placeholder="Ej. 5500"></div>
+                        <div class="form-group"><label>Piso / Depto (Opcional)</label><input type="text" id="envio-piso" placeholder="Ej. 2do B"></div>
+                        <div class="form-group"><label>Código Postal</label><input type="text" id="envio-cp" placeholder="Ej. 5501"></div>
                     </div>
-                    <button class="btn-blue btn-full mt-3" onclick="irPaso2()">Continuar <i class="fas fa-arrow-right"></i></button>
+                    <div class="form-row">
+                        <div class="form-group"><label>Localidad</label><input type="text" id="envio-localidad" placeholder="Ej. Godoy Cruz"></div>
+                        <div class="form-group"><label>Provincia</label><input type="text" id="envio-provincia" placeholder="Ej. Mendoza"></div>
+                    </div>
+                    <button class="btn-blue btn-full mt-3" onclick="procesarPasoEnvio()">Continuar <i class="fas fa-arrow-right"></i></button>
                 </div>
             </div>
 
@@ -62,8 +116,7 @@
                 <h2>2. Identificación</h2>
                 <div class="checkout-form text-center">
                     <p>¿Cómo deseas continuar con tu compra?</p>
-                    
-                    <div class="role-selector" style="display: flex; justify-content: center; gap: 20px;">
+                    <div class="role-selector">
                         <label class="role-card">
                             <input type="radio" name="rol" value="cliente" checked>
                             <i class="fas fa-user"></i>
@@ -80,7 +133,6 @@
                             <p>Compra rápida</p>
                         </label>
                     </div>
-
                     <button class="btn-blue mt-3" onclick="irPaso3()">Confirmar y Continuar <i class="fas fa-arrow-right"></i></button>
                 </div>
             </div>
@@ -88,16 +140,41 @@
             <div id="paso-3" class="checkout-step" style="display: none;">
                 <h2>3. Pago Seguro</h2>
                 <div class="checkout-form">
-                    <div class="payment-icons">
-                        <i class="fab fa-cc-visa"></i> <i class="fab fa-cc-mastercard"></i> <i class="fab fa-cc-amex"></i>
+                    <p class="text-center" style="margin-bottom: 20px;">Selecciona tu método de pago:</p>
+                    
+                    <div class="payment-selector">
+                        <label class="payment-card">
+                            <input type="radio" name="metodo-pago" value="tarjeta" checked onclick="toggleMetodoPago('tarjeta')">
+                            <i class="fas fa-credit-card"></i>
+                            <h4>Tarjeta</h4>
+                            <p>Crédito/Débito</p>
+                        </label>
+                        <label class="payment-card">
+                            <input type="radio" name="metodo-pago" value="mercadopago" onclick="toggleMetodoPago('mp')">
+                            <i class="fas fa-wallet"></i>
+                            <h4>Mercado Pago</h4>
+                            <p>Rápido y seguro</p>
+                        </label>
                     </div>
-                    <div class="form-group"><label>Número de Tarjeta</label><input type="text" placeholder="0000 0000 0000 0000"></div>
-                    <div class="form-row">
-                        <div class="form-group"><label>Fecha de Vencimiento</label><input type="text" placeholder="MM/AA"></div>
-                        <div class="form-group"><label>Código de Seguridad (CVV)</label><input type="text" placeholder="123"></div>
+
+                    <div id="form-tarjeta-detalle">
+                        <div class="payment-icons" style="text-align: center; margin-bottom: 15px;">
+                            <i class="fab fa-cc-visa"></i> <i class="fab fa-cc-mastercard"></i> <i class="fab fa-cc-amex"></i>
+                        </div>
+                        <div class="form-group"><label>Número de Tarjeta</label><input type="text" placeholder="0000 0000 0000 0000"></div>
+                        <div class="form-row">
+                            <div class="form-group"><label>Fecha de Vencimiento</label><input type="text" placeholder="MM/AA"></div>
+                            <div class="form-group"><label>Código (CVV)</label><input type="text" placeholder="123"></div>
+                        </div>
+                        <div class="form-group"><label>Nombre en la Tarjeta</label><input type="text" placeholder="Como aparece en el plástico"></div>
                     </div>
-                    <div class="form-group"><label>Nombre en la Tarjeta</label><input type="text" placeholder="Como aparece en la tarjeta"></div>
-                    <button id="btn-finalizar" class="btn-yellow btn-full mt-3" onclick="finalizarCompra()">
+
+                    <div id="mensaje-mp" style="display: none; text-align: center; padding: 20px; background: rgba(0,123,255,0.05); border: 1px dashed #007bff; border-radius: 8px;">
+                        <img src="https://imgmp.mlstatic.com/resources/frontend/commons/logotypes/mp-logo-v-c-m.png" alt="Mercado Pago" style="width: 100px; margin-bottom: 10px;">
+                        <p>Serás redirigido a la plataforma segura de Mercado Pago al finalizar.</p>
+                    </div>
+
+                    <button id="btn-finalizar" class="btn-yellow btn-full mt-4" onclick="finalizarCompra()">
                         <i class="fas fa-lock"></i> Finalizar Compra
                     </button>
                 </div>
@@ -107,5 +184,19 @@
     </section>
 
     <script src="main.js"></script>
+    <script>
+        // Función interna para el manejo de la UI de pago
+        function toggleMetodoPago(metodo) {
+            const formTarjeta = document.getElementById('form-tarjeta-detalle');
+            const mensajeMP = document.getElementById('mensaje-mp');
+            if (metodo === 'tarjeta') {
+                formTarjeta.style.display = 'block';
+                mensajeMP.style.display = 'none';
+            } else {
+                formTarjeta.style.display = 'none';
+                mensajeMP.style.display = 'block';
+            }
+        }
+    </script>
 </body>
 </html>
