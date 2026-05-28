@@ -1,5 +1,5 @@
 // admin.js - Exclusivo para el panel de proveedor
-const API_URL = 'http://localhost:8080/api/productos';
+const API_URL = "https://neosuplex-web.onrender.com/api/productos";
 let listaProductos = [];
 
 // Cuando la página carga, traemos la lista de productos

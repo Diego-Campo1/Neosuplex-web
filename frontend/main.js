@@ -6,7 +6,7 @@ let listaCompletaProductos = [];
 let listaFiltrada = []; 
 let paginaActual = 1;
 const productosPorPagina = 8; 
-const API_BASE_URL = "http://localhost:8080/api";
+const API_BASE_URL = "https://neosuplex-web.onrender.com/api/productos";
 
 // ==========================================
 // INICIO AUTOMÁTICO (EVENT LISTENERS)

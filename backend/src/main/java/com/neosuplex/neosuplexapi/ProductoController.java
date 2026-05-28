@@ -8,7 +8,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/productos")
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "https://neosuplex-web.onrender.com/api/productos")
 public class ProductoController {
 
     @Autowired
