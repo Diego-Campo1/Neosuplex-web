@@ -160,5 +160,34 @@
     </style>
 
     <script src="main.js"></script>
+
+    <div id="contenedor-productos">
+    </div>
+
+<script>
+    // 1. Llamamos a tu backend en Render
+    fetch('https://neosuplex-api.onrender.com/api/productos')
+        .then(response => response.json())
+        .then(data => {
+            const contenedor = document.getElementById('contenedor-productos');
+            
+            // 2. Si no hay productos, mostramos un mensaje
+            if (data.length === 0) {
+                contenedor.innerHTML = '<p>Aún no hay productos disponibles.</p>';
+                return;
+            }
+
+            // 3. Si hay productos, los dibujamos
+            data.forEach(producto => {
+                const item = document.createElement('div');
+                item.innerHTML = `
+                    <h3>${producto.nombre}</h3>
+                    <p>Precio: $${producto.precio}</p>
+                `;
+                contenedor.appendChild(item);
+            });
+        })
+        .catch(error => console.error('Error al traer productos:', error));
+</script>
 </body>
 </html>
