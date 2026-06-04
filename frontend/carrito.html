@@ -187,16 +187,28 @@
     <script>
         // Función interna para el manejo de la UI de pago
         function toggleMetodoPago(metodo) {
-            const formTarjeta = document.getElementById('form-tarjeta-detalle');
-            const mensajeMP = document.getElementById('mensaje-mp');
-            if (metodo === 'tarjeta') {
-                formTarjeta.style.display = 'block';
-                mensajeMP.style.display = 'none';
-            } else {
-                formTarjeta.style.display = 'none';
-                mensajeMP.style.display = 'block';
-            }
-        }
+    const formTarjeta = document.getElementById('form-tarjeta-detalle');
+    const mensajeMP = document.getElementById('mensaje-mp');
+    const btnFinalizar = document.getElementById('btn-finalizar');
+
+    if (metodo === 'tarjeta') {
+        formTarjeta.style.display = 'block';
+        mensajeMP.style.display = 'none';
+        
+        // Vuelve el botón a su estado original amarillo
+        btnFinalizar.className = "btn-yellow btn-full mt-4";
+        btnFinalizar.innerHTML = '<i class="fas fa-lock"></i> Finalizar Compra';
+    } else {
+        formTarjeta.style.display = 'none';
+        mensajeMP.style.display = 'block';
+        
+        // Transforma el botón al estilo celeste de Mercado Pago
+        btnFinalizar.className = "btn-blue btn-full mt-4";
+        btnFinalizar.style.backgroundColor = "#009ee3"; // Color oficial de MP
+        btnFinalizar.style.color = "white";
+        btnFinalizar.innerHTML = 'Pagar con Mercado Pago';
+    }
+}
     </script>
 </body>
 </html>

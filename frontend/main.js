@@ -297,10 +297,44 @@ function toggleMetodoPago(metodo) {
     }
 }
 
-function finalizarCompra() {
-    alert("¡Compra exitosa! Se ha enviado tu factura al correo electrónico registrado.");
-    localStorage.removeItem('miCarrito');
-    window.location.href = 'index.html';
+async function finalizarCompra() {
+    // Detectamos qué método de pago está seleccionado
+    const metodoPago = document.querySelector('input[name="metodo-pago"]:checked').value;
+
+    if (metodoPago === 'mercadopago') {
+        if (carrito.length === 0) {
+            alert("Tu carrito está vacío.");
+            return;
+        }
+
+        try {
+            // Manda los datos del carrito a tu backend de Spring Boot
+            const response = await fetch('http://localhost:8080/api/pagos/crear-preferencia', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                // Enviamos los productos que están en el carrito
+                body: JSON.stringify(carrito) 
+            });
+            
+            const data = await response.json();
+            
+            // Si todo sale bien, redirigimos al enlace que nos dio Mercado Pago
+            if (data.init_point) {
+                window.location.href = data.init_point; 
+            } else {
+                alert("Error al generar el link de pago.");
+            }
+        } catch (error) {
+            console.error(error);
+            alert("No se pudo conectar con el servidor para procesar el pago.");
+        }
+
+    } else {
+        // Lógica original para tarjeta de crédito/débito
+        alert("¡Compra exitosa! Se ha enviado tu factura al correo electrónico registrado.");
+        localStorage.removeItem('miCarrito');
+        window.location.href = 'index.html';
+    }
 }
 
 // ==========================================
@@ -367,3 +401,61 @@ function toggleChat() {
     const chat = document.getElementById('chat-window');
     chat.style.display = (chat.style.display === 'none' || chat.style.display === '') ? 'flex' : 'none';
 }
+
+// ==========================================
+// INTEGRACIÓN DE INTELIGENCIA ARTIFICIAL (GEMINI)
+// ==========================================
+async function sendMessage() {
+    const input = document.getElementById("chat-input");
+    const content = document.getElementById("chat-content");
+    const mensaje = input.value.trim();
+
+    if (mensaje === "") return;
+
+    // 1. Dibuja en pantalla lo que escribió el usuario
+    content.innerHTML += `<p style="background: #10b981; color: black; padding: 8px; border-radius: 8px; align-self: flex-end; max-width: 80%;">${mensaje}</p>`;
+    input.value = "";
+    content.scrollTop = content.scrollHeight;
+
+    // 2. Muestra los "puntitos suspensivos" mientras piensa
+    const loadingId = "loading-" + Date.now();
+    content.innerHTML += `<p id="${loadingId}" style="background: #111; padding: 8px; border-radius: 8px; align-self: flex-start; color: #888; font-style: italic;">NeoBot está escribiendo...</p>`;
+    content.scrollTop = content.scrollHeight;
+
+    try {
+        // 3. Envía el texto a tu servidor Java local
+        const response = await fetch("http://localhost:8080/api/chat", {
+            method: "POST",
+            headers: {
+                "Content-Type": "text/plain"
+            },
+            body: mensaje
+        });
+
+        const data = await response.text();
+        
+        // 4. Borra el mensaje de "escribiendo" y pone la respuesta final de la IA
+        document.getElementById(loadingId).remove();
+        content.innerHTML += `<p style="background: #111; padding: 8px; border-radius: 8px; align-self: flex-start; max-width: 80%; line-height: 1.4;">${data}</p>`;
+        
+    } catch (error) {
+        // Si el backend de Java está apagado o falla la conexión
+        document.getElementById(loadingId).remove();
+        content.innerHTML += `<p style="background: #ff4444; color: white; padding: 8px; border-radius: 8px; align-self: flex-start;">Error al conectar con el servidor.</p>`;
+    }
+    
+    // Scrollea hacia abajo para ver el mensaje nuevo
+    content.scrollTop = content.scrollHeight;
+}
+
+// 5. Permite enviar el mensaje apretando la tecla "Enter"
+document.addEventListener("DOMContentLoaded", () => {
+    const chatInput = document.getElementById("chat-input");
+    if (chatInput) {
+        chatInput.addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                sendMessage();
+            }
+        });
+    }
+});
