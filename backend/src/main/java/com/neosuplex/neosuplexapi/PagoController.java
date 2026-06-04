@@ -21,7 +21,7 @@ public class PagoController {
     public ResponseEntity<?> crearPreferencia(@RequestBody List<Map<String, Object>> carrito) {
         try {
             // Agrega tu credencial (Access Token) de prueba de Mercado Pago
-            MercadoPagoConfig.setAccessToken("APP_USR-7765593385580859-060311-d5ec6fd0288f1f9a5e068674cf4ca2c4-3448107666");
+            MercadoPagoConfig.setAccessToken("TU_TOKEN_DE_MERCADO_PAGO_AQUI");
 
             List<PreferenceItemRequest> items = new ArrayList<>();
 

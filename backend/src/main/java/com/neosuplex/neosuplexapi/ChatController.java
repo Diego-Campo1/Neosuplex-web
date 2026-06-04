@@ -15,7 +15,7 @@ import java.util.List;
 public class ChatController {
 
     // Reemplaza esto con tu clave de API real de Google Gemini (¡Y no la subas a GitHub!)
-    private final String GEMINI_API_KEY = "TU_CLAVE_API_AQUI";
+    private final String GEMINI_API_KEY = "";
     private final String GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=" + GEMINI_API_KEY;  
 
     @PostMapping
@@ -36,6 +36,7 @@ public class ChatController {
                 "6. Si te preguntan cuanto cuesta el envio, diles que no tienes esa informacion ya que es un dato externo y redirigelo con un agente humano (Dales un numero de whatsapp al que puedan comunicarse como: 2617691326 o diles que pueden enviar un email con su consulta a neosuplexweb@gmail.com de preferencia). " +
                 "7. Haz recomendaciones de productos que se puedan llevar dependiendo del objetivo que quieren alcanzar (pregúntales) y arma 'combos' de productos que puedan llevarse. " +
                 "8. Empieza el chat con un 'Hola, soy Neobot, el asistente virtual de ventas de Neosuplex ¿En qué puedo ayudarte?' y termina con un saludo cordial. " +
+                "9. Si solicitan informacion de los productos puedes sacarla de la base de datos como precio,descripcion,stock y para que sirven" +
                 "Responde a este mensaje del cliente basándote en esas reglas: " + mensajeUsuario;
 
             // Estructura JSON requerida por la API de Gemini
