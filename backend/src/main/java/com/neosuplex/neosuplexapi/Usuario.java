@@ -21,6 +21,10 @@ public class Usuario {
 
     private String rol;
 
+    // NUEVO: Atributo para guardar los puntos del cliente
+    @Column(columnDefinition = "integer default 0")
+    private int puntos;
+
     public Usuario() {}
 
     public Usuario(String nombre, String email, String password, String rol) {
@@ -28,6 +32,7 @@ public class Usuario {
         this.email = email;
         this.password = password;
         this.rol = rol;
+        this.puntos = 0; // Cuando se registran, arrancan con 0 puntos
     }
 
     public Long getId() { return id; }
@@ -44,5 +49,9 @@ public class Usuario {
 
     public String getRol() { return rol; }
     public void setRol(String rol) { this.rol = rol; }
+
+    // NUEVO: Getters y Setters de los puntos
+    public int getPuntos() { return puntos; }
+    public void setPuntos(int puntos) { this.puntos = puntos; }
 
 }
